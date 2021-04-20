@@ -56,7 +56,7 @@ public class Patient {
 	@Column(name = "deadline")
 	private LocalDate deadLine;
 	
-	@ManyToMany(fetch = FetchType.LAZY) 
+	@ManyToMany(cascade = CascadeType.ALL) 
 	@JoinColumn(name = "id_patient")
 	private List<Medicine> medicines;
 

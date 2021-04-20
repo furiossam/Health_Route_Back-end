@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.univali.healthroutes.api.AG.model.Individual;
 import br.com.univali.healthroutes.api.AG.service.AGService;
+import br.com.univali.healthroutes.api.geo.service.GeoCodingService;
 import br.com.univali.healthroutes.api.patient.model.Patient;
 import br.com.univali.healthroutes.api.service.HealthRoutesService;
 import br.com.univali.healthroutes.api.user.dto.UserDto;
@@ -36,6 +37,9 @@ public class HealthRoutesController {
 
 	@Autowired
 	private AGService agService;
+	
+	@Autowired
+	private GeoCodingService geoService;
 
 	@RequestMapping(value = "/teste", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public String teste() {

@@ -33,7 +33,8 @@ public class SecurityConfig extends WebSecurityConfig {
 
 		http.cors().and().authorizeRequests()
 				// Authentication
-				.antMatchers(HttpMethod.POST, "/login").permitAll()
+				//Tudo liberado mudar depois
+				.antMatchers(HttpMethod.POST, "/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/**").permitAll()
 				
 				.anyRequest().authenticated().and().httpBasic().disable()

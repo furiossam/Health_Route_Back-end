@@ -48,7 +48,7 @@ public class Adress {
 	private boolean depot = false;
 	
 	@Column(name = "createDate")
-	private LocalDate createDate;
+	private LocalDate createDate = LocalDate.now();
 
 	public Adress(Long id_adress, String street, int number, String district, String county, String state,
 			double latitude, double longitude, LocalDate createDate) {
