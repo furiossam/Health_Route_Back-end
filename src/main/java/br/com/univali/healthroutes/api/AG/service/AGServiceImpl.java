@@ -3,10 +3,13 @@ package br.com.univali.healthroutes.api.AG.service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import org.hibernate.boot.archive.scan.spi.PackageInfoArchiveEntryHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +35,8 @@ public class AGServiceImpl implements AGService {
 	private List<Patient> patients;
 
 	private int indexDepot;
+	
+	public final double AVERAGE_SPEED = 35000.0; 
 
 	double[][] matrixTravelDistance;
 	double[][] matrixTimeTravel;
@@ -121,7 +126,8 @@ public class AGServiceImpl implements AGService {
 		int inferioLimit = 0;
 		int superiotLimit = 0;
 		Random generator = new Random();
-		for (int i = 0; i < individuals.size() / 2; i++) {
+		int limitCrossovers = individuals.size() / 2;
+		for (int i = 0; i < limitCrossovers ;i++) {
 			int indexfirstParent = generator.nextInt(individuals.size());
 			int indexSecondParent = generator.nextInt(individuals.size());
 			inferioLimit = generator.nextInt(individuals.get(indexfirstParent).getGenotype().size() / 2);
@@ -129,6 +135,10 @@ public class AGServiceImpl implements AGService {
 					+ individuals.get(indexfirstParent).getGenotype().size() / 2;
 			List<Patient> patientAux = new ArrayList<>();
 			List<Integer> indexes = new ArrayList<>();
+			
+			List<Patient> patientAux2 = new ArrayList<>();
+			List<Integer> indexes2 = new ArrayList<>();
+			// Crossover Individuo 1
 			for(int j= 0; j<inferioLimit;j++) {
 				patientAux.add(individuals.get(indexfirstParent).getGenotype().get(j));
 				indexes.add(individuals.get(indexfirstParent).getIndexes().get(j));
@@ -141,18 +151,61 @@ public class AGServiceImpl implements AGService {
 				patientAux.add(individuals.get(indexfirstParent).getGenotype().get(j));
 				indexes.add(individuals.get(indexfirstParent).getIndexes().get(j));
 			}
+			// Crossover Individuo 2
+			for(int j= 0; j<inferioLimit;j++) {
+				patientAux2.add(individuals.get(indexSecondParent).getGenotype().get(j));
+				indexes2.add(individuals.get(indexSecondParent).getIndexes().get(j));
+			}
+			for(int j = inferioLimit; j<superiotLimit;j++) {
+				patientAux2.add(individuals.get(indexfirstParent).getGenotype().get(j));
+				indexes2.add(individuals.get(indexfirstParent).getIndexes().get(j));
+			}
+			for(int j = superiotLimit;j<individuals.get(indexSecondParent).getGenotype().size();j++) {
+				patientAux2.add(individuals.get(indexSecondParent).getGenotype().get(j));
+				indexes2.add(individuals.get(indexSecondParent).getIndexes().get(j));
+			}
+			
+			// Mutação 1 porcento de chance
+			Random mutation = new Random();
+			if(mutation.nextInt(100)==0) {
+				if(mutation.nextInt(1)==0) {
+					int firstIndex = mutation.nextInt(patientAux.size()-2)+1;
+					int secondtIndex = mutation.nextInt(patientAux.size()-2)+1;
+					Collections.swap(patientAux, firstIndex, secondtIndex);
+					Collections.swap(indexes, firstIndex, secondtIndex);
+				}
+				else {
+					int firstIndex = mutation.nextInt(patientAux2.size()-2)+1;
+					int secondtIndex = mutation.nextInt(patientAux2.size()-2)+1;
+					Collections.swap(patientAux2, firstIndex, secondtIndex);
+					Collections.swap(indexes2, firstIndex, secondtIndex);
+				}
+			}
+			
 			double timeWindowCounter = individualTimeWindowCalculator(indexes);
 			int capacityCounter = individualCapacityCalculator(patientAux);
+			
 			double multiplicator = calculateCriticalityMultiplicator(patientAux);
 			double score = calculateScore(timeWindowCounter, capacityCounter, patientAux.size(), multiplicator, patientAux);
 			Individual individual = new Individual(patientAux, score, indexes);
+			
+			
+			double timeWindowCounter2 = individualTimeWindowCalculator(indexes2);
+			int capacityCounter2 = individualCapacityCalculator(patientAux2);
+			
+			double multiplicator2 = calculateCriticalityMultiplicator(patientAux2);
+			double score2 = calculateScore(timeWindowCounter2, capacityCounter2, patientAux2.size(), multiplicator2, patientAux2);
+			Individual individual2 = new Individual(patientAux2, score2, indexes2);
+
 			individuals.add(individual);
+			individuals.add(individual2);
 		}
 		individuals.sort(Comparator.comparingDouble(Individual::getScore).reversed());
 		List<Individual> individualsFinal = new ArrayList<>();
 		for (int i = 0; i < sizePopulation; i++) {
 			individualsFinal.add(individuals.get(i));
 		}
+		individuals.clear();
 		return individualsFinal;
 	}
 
@@ -227,7 +280,7 @@ public class AGServiceImpl implements AGService {
 			}
 		}
 		
-		return ((((size * 1000) + timeWindowIndividualCounter + (vCapacityIndividualCounter * 10)) * multiplicator)-repeatCounter);
+		return (((((size * 1000) / (timeWindowIndividualCounter*10)) + (vCapacityIndividualCounter * 10)) * multiplicator)-repeatCounter);
 	}
 
 	public void setMatrices(List<Patient> patients) {
@@ -241,8 +294,8 @@ public class AGServiceImpl implements AGService {
 		Root root = serviceMatrix.getMatrix(adresses);
 		for (Result result : root.getResourceSets().get(0).getResources().get(0).getResults()) {
 			matrixTravelDistance[result.getOriginIndex()][result.getDestinationIndex()] = result.getTravelDistance();
-			matrixTimeTravel[result.getOriginIndex()][result.getDestinationIndex()] = result.getTravelDuration()
-					* 0.01945;
+			matrixTimeTravel[result.getOriginIndex()][result.getDestinationIndex()] = 
+					((result.getTravelDistance() / AVERAGE_SPEED) * 60) + 5;
 		}
 	}
 

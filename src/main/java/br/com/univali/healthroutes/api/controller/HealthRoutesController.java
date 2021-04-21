@@ -95,7 +95,7 @@ public class HealthRoutesController {
 	@GetMapping(value = "/generateFirstGeneration")
 	public ResponseEntity<?> generateFirstGeneration(@RequestParam int vCapacity, @RequestParam int timeWindow,
 			@RequestParam int sizePop) {
-		List<Individual> individuals = agService.generateFirstGenerationRandom(vCapacity, timeWindow, sizePop, 100);
+		List<Individual> individuals = agService.generateFirstGenerationRandom(vCapacity, timeWindow, sizePop, 50);
 		for (int i = 0; i < individuals.size(); i++) {
 			System.out.println("Score: " + individuals.get(i).getScore());
 			System.out.print("População:");
