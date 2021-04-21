@@ -293,9 +293,9 @@ public class AGServiceImpl implements AGService {
 		}
 		Root root = serviceMatrix.getMatrix(adresses);
 		for (Result result : root.getResourceSets().get(0).getResources().get(0).getResults()) {
-			matrixTravelDistance[result.getOriginIndex()][result.getDestinationIndex()] = result.getTravelDistance();
+			matrixTravelDistance[result.getOriginIndex()][result.getDestinationIndex()] = result.getTravelDistance()*1000;
 			matrixTimeTravel[result.getOriginIndex()][result.getDestinationIndex()] = 
-					((result.getTravelDistance() / AVERAGE_SPEED) * 60) + 5;
+					(((result.getTravelDistance()*1000) / AVERAGE_SPEED) * 60) + 5;
 		}
 	}
 
