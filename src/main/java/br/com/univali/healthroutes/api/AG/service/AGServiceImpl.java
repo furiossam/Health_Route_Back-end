@@ -35,8 +35,8 @@ public class AGServiceImpl implements AGService {
 	private List<Patient> patients;
 
 	private int indexDepot;
-	
-	public final double AVERAGE_SPEED = 35000.0; 
+
+	public final double AVERAGE_SPEED = 35000.0;
 
 	double[][] matrixTravelDistance;
 	double[][] matrixTimeTravel;
@@ -74,7 +74,8 @@ public class AGServiceImpl implements AGService {
 	}
 
 	@Override
-	public List<Individual> generateFirstGenerationRandom(int vehycleCapacity, double timeWindow, int sizePopulation, int generations) {
+	public List<Individual> generateFirstGenerationRandom(int vehycleCapacity, double timeWindow, int sizePopulation,
+			int generations) {
 		/*
 		 * Geração dos individuos randomicamente seguindo critérios da capacidade do
 		 * veiculo e do tempo disponivel para a rota.
@@ -112,12 +113,13 @@ public class AGServiceImpl implements AGService {
 			individualRoute.add(patients.get(indexDepot));
 			indexes.add(indexDepot);
 			double multiplicator = calculateCriticalityMultiplicator(individualRoute);
-			double score = calculateScore(timeWindownCounter, capacityCounter, individualRoute.size(), multiplicator, individualRoute);
+			double score = calculateScore(timeWindownCounter, capacityCounter, individualRoute.size(), multiplicator,
+					individualRoute);
 			Individual individual = new Individual(individualRoute, score, indexes);
 			individuals.add(individual);
 		}
 		for (int i = 0; i < generations; i++) {
-			individuals = crossoverElitistTwoPoints(individuals,sizePopulation);
+			individuals = crossoverElitistTwoPoints(individuals, sizePopulation);
 		}
 		return individuals;
 	}
@@ -127,7 +129,7 @@ public class AGServiceImpl implements AGService {
 		int superiotLimit = 0;
 		Random generator = new Random();
 		int limitCrossovers = individuals.size() / 2;
-		for (int i = 0; i < limitCrossovers ;i++) {
+		for (int i = 0; i < limitCrossovers; i++) {
 			int indexfirstParent = generator.nextInt(individuals.size());
 			int indexSecondParent = generator.nextInt(individuals.size());
 			inferioLimit = generator.nextInt(individuals.get(indexfirstParent).getGenotype().size() / 2);
@@ -135,66 +137,66 @@ public class AGServiceImpl implements AGService {
 					+ individuals.get(indexfirstParent).getGenotype().size() / 2;
 			List<Patient> patientAux = new ArrayList<>();
 			List<Integer> indexes = new ArrayList<>();
-			
+
 			List<Patient> patientAux2 = new ArrayList<>();
 			List<Integer> indexes2 = new ArrayList<>();
 			// Crossover Individuo 1
-			for(int j= 0; j<inferioLimit;j++) {
+			for (int j = 0; j < inferioLimit; j++) {
 				patientAux.add(individuals.get(indexfirstParent).getGenotype().get(j));
 				indexes.add(individuals.get(indexfirstParent).getIndexes().get(j));
 			}
-			for(int j = inferioLimit; j<superiotLimit;j++) {
+			for (int j = inferioLimit; j < superiotLimit; j++) {
 				patientAux.add(individuals.get(indexSecondParent).getGenotype().get(j));
 				indexes.add(individuals.get(indexSecondParent).getIndexes().get(j));
 			}
-			for(int j = superiotLimit;j<individuals.get(indexfirstParent).getGenotype().size();j++) {
+			for (int j = superiotLimit; j < individuals.get(indexfirstParent).getGenotype().size(); j++) {
 				patientAux.add(individuals.get(indexfirstParent).getGenotype().get(j));
 				indexes.add(individuals.get(indexfirstParent).getIndexes().get(j));
 			}
 			// Crossover Individuo 2
-			for(int j= 0; j<inferioLimit;j++) {
+			for (int j = 0; j < inferioLimit; j++) {
 				patientAux2.add(individuals.get(indexSecondParent).getGenotype().get(j));
 				indexes2.add(individuals.get(indexSecondParent).getIndexes().get(j));
 			}
-			for(int j = inferioLimit; j<superiotLimit;j++) {
+			for (int j = inferioLimit; j < superiotLimit; j++) {
 				patientAux2.add(individuals.get(indexfirstParent).getGenotype().get(j));
 				indexes2.add(individuals.get(indexfirstParent).getIndexes().get(j));
 			}
-			for(int j = superiotLimit;j<individuals.get(indexSecondParent).getGenotype().size();j++) {
+			for (int j = superiotLimit; j < individuals.get(indexSecondParent).getGenotype().size(); j++) {
 				patientAux2.add(individuals.get(indexSecondParent).getGenotype().get(j));
 				indexes2.add(individuals.get(indexSecondParent).getIndexes().get(j));
 			}
-			
+
 			// Mutação 1 porcento de chance
 			Random mutation = new Random();
-			if(mutation.nextInt(100)==0) {
-				if(mutation.nextInt(1)==0) {
-					int firstIndex = mutation.nextInt(patientAux.size()-2)+1;
-					int secondtIndex = mutation.nextInt(patientAux.size()-2)+1;
+			if (mutation.nextInt(100) == 0) {
+				if (mutation.nextInt(1) == 0) {
+					int firstIndex = mutation.nextInt(patientAux.size() - 2) + 1;
+					int secondtIndex = mutation.nextInt(patientAux.size() - 2) + 1;
 					Collections.swap(patientAux, firstIndex, secondtIndex);
 					Collections.swap(indexes, firstIndex, secondtIndex);
-				}
-				else {
-					int firstIndex = mutation.nextInt(patientAux2.size()-2)+1;
-					int secondtIndex = mutation.nextInt(patientAux2.size()-2)+1;
+				} else {
+					int firstIndex = mutation.nextInt(patientAux2.size() - 2) + 1;
+					int secondtIndex = mutation.nextInt(patientAux2.size() - 2) + 1;
 					Collections.swap(patientAux2, firstIndex, secondtIndex);
 					Collections.swap(indexes2, firstIndex, secondtIndex);
 				}
 			}
-			
+
 			double timeWindowCounter = individualTimeWindowCalculator(indexes);
 			int capacityCounter = individualCapacityCalculator(patientAux);
-			
+
 			double multiplicator = calculateCriticalityMultiplicator(patientAux);
-			double score = calculateScore(timeWindowCounter, capacityCounter, patientAux.size(), multiplicator, patientAux);
+			double score = calculateScore(timeWindowCounter, capacityCounter, patientAux.size(), multiplicator,
+					patientAux);
 			Individual individual = new Individual(patientAux, score, indexes);
-			
-			
+
 			double timeWindowCounter2 = individualTimeWindowCalculator(indexes2);
 			int capacityCounter2 = individualCapacityCalculator(patientAux2);
-			
+
 			double multiplicator2 = calculateCriticalityMultiplicator(patientAux2);
-			double score2 = calculateScore(timeWindowCounter2, capacityCounter2, patientAux2.size(), multiplicator2, patientAux2);
+			double score2 = calculateScore(timeWindowCounter2, capacityCounter2, patientAux2.size(), multiplicator2,
+					patientAux2);
 			Individual individual2 = new Individual(patientAux2, score2, indexes2);
 
 			individuals.add(individual);
@@ -253,12 +255,22 @@ public class AGServiceImpl implements AGService {
 	public double calculateCriticalityMultiplicator(List<Patient> patients) {
 		double multiplicator = 1;
 		for (int i = 1; i < patients.size() - 2; i++) {
-			if (calculateDaysBetween(patients.get(i).getDeadLine()) < 5) {
-				multiplicator = 1.5;
+			if (calculateDaysBetween(patients.get(i).getDeadLine()) < 0) {
+				multiplicator += 10;
+			} else if (calculateDaysBetween(patients.get(i).getDeadLine()) < 1) {
+				multiplicator += 5;
+			} else if (calculateDaysBetween(patients.get(i).getDeadLine()) < 2) {
+				multiplicator += 4;
+			} else if (calculateDaysBetween(patients.get(i).getDeadLine()) < 3) {
+				multiplicator += 3.5;
+			} else if (calculateDaysBetween(patients.get(i).getDeadLine()) < 4) {
+				multiplicator += 3;
+			} else if (calculateDaysBetween(patients.get(i).getDeadLine()) < 5) {
+				multiplicator += 2.5;
 			} else if (calculateDaysBetween(patients.get(i).getDeadLine()) < 10) {
-				multiplicator = 1.2;
+				multiplicator += 2;
 			} else {
-				multiplicator = 1;
+				multiplicator += 1;
 			}
 		}
 		return multiplicator;
@@ -266,21 +278,22 @@ public class AGServiceImpl implements AGService {
 
 	public double calculateScore(double timeWindowIndividualCounter, double vCapacityIndividualCounter, int size,
 			double multiplicator, List<Patient> patients) {
-		
+
 		double repeatCounter = 0;
-		for(int i=1;i<patients.size()-1;i++) {
-			if(patients.get(i).getAdress().isDepot())
+		for (int i = 1; i < patients.size() - 1; i++) {
+			if (patients.get(i).getAdress().isDepot())
 				repeatCounter += 10000.0;
-			for(int j=1;j<patients.size()-1;j++) {
-				if(i!=j) {
-					if(patients.get(i).getName()==patients.get(j).getName()) {
+			for (int j = 1; j < patients.size() - 1; j++) {
+				if (i != j) {
+					if (patients.get(i).getName() == patients.get(j).getName()) {
 						repeatCounter += 10000.0;
 					}
-				}	
+				}
 			}
 		}
-		
-		return (((((size * 1000) / (timeWindowIndividualCounter*10)) + (vCapacityIndividualCounter * 10)) * multiplicator)-repeatCounter);
+
+		return (((((size * 1000) / (timeWindowIndividualCounter * 10)) + (vCapacityIndividualCounter * 10))
+				* multiplicator) - repeatCounter);
 	}
 
 	public void setMatrices(List<Patient> patients) {
@@ -293,9 +306,10 @@ public class AGServiceImpl implements AGService {
 		}
 		Root root = serviceMatrix.getMatrix(adresses);
 		for (Result result : root.getResourceSets().get(0).getResources().get(0).getResults()) {
-			matrixTravelDistance[result.getOriginIndex()][result.getDestinationIndex()] = result.getTravelDistance()*1000;
-			matrixTimeTravel[result.getOriginIndex()][result.getDestinationIndex()] = 
-					(((result.getTravelDistance()*1000) / AVERAGE_SPEED) * 60) + 5;
+			matrixTravelDistance[result.getOriginIndex()][result.getDestinationIndex()] = result.getTravelDistance()
+					* 1000;
+			matrixTimeTravel[result.getOriginIndex()][result
+					.getDestinationIndex()] = (((result.getTravelDistance() * 1000) / AVERAGE_SPEED) * 60) + 5;
 		}
 	}
 
