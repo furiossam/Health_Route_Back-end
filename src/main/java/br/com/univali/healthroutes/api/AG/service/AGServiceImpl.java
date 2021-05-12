@@ -85,7 +85,7 @@ public class AGServiceImpl implements AGService {
 		setMatrices(patients);
 		indexDepot = returnIndexDepot(patients);
 		showMatrices(matrixTimeTravel, matrixTravelDistance);
-		for (int i = 0; i < sizePopulation; i++) {
+		for (int i = 0; i < sizePopulation*10; i++) {
 			List<Patient> individualRoute = new ArrayList<>();
 			List<Adress> adresses = new ArrayList<>();
 			List<Integer> indexes = new ArrayList<>();
@@ -118,10 +118,15 @@ public class AGServiceImpl implements AGService {
 			Individual individual = new Individual(individualRoute, score, indexes);
 			individuals.add(individual);
 		}
-		for (int i = 0; i < generations; i++) {
-			individuals = crossoverElitistTwoPoints(individuals, sizePopulation);
+		individuals.sort(Comparator.comparingDouble(Individual::getScore).reversed());
+		List<Individual> individualsFinal = new ArrayList<>();
+		for (int i = 0; i < sizePopulation; i++) {
+			individualsFinal.add(individuals.get(i));
 		}
-		return individuals;
+		for (int i = 0; i < generations; i++) {
+			individualsFinal = crossoverElitistTwoPoints(individualsFinal, sizePopulation);
+		}
+		return individualsFinal;
 	}
 
 	public List<Individual> crossoverElitistTwoPoints(List<Individual> individuals, int sizePopulation) {
