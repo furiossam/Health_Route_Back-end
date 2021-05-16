@@ -48,7 +48,7 @@ public class TokenAuthenticationService {
 	private static final String USERNAME = "cpf";
 
 	private static final String CLAIM_ROLES = "ROLES";
-	private static final String ISSUER = "br.com.univali.pricecomparison";
+	private static final String ISSUER = "br.com.univali.healthroutes";
 	private static final String ROLE_PREFIX = "ROLE_";
 	
 	public enum Auth{

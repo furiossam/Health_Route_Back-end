@@ -31,5 +31,17 @@ public class Login {
 	
 	@Column(name = "createDate")
 	private LocalDate createDate;
+	
+	public Login() {
+		
+	}
+
+	public Login(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.enable = false;
+		this.createDate = LocalDate.now();
+	}
 		
 }

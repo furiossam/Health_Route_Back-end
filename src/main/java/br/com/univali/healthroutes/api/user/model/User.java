@@ -2,6 +2,7 @@ package br.com.univali.healthroutes.api.user.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +35,7 @@ public class User {
 	@Column(name = "email")
 	private String email;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="id_login")	
 	@NotNull
 	private Login login;
@@ -45,13 +46,15 @@ public class User {
 	@Column(name = "createDate")
 	private LocalDate createDate;
 	
-	public User(Long id, String cpf, String name, String email, Login login, Boolean isActive) {
-		this.id_user = id;
+	public User() {
+		
+	}
+	
+	public User(String cpf, String name, String email, String password) {
 		this.cpf = cpf;
 		this.name = name;
 		this.email = email;
-		this.login = login;
-		this.isActive = isActive;
+		this.login = new Login(cpf, password);
 	}
 
 }

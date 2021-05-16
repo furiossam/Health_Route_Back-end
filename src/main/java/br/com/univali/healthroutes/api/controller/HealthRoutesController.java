@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,11 +60,11 @@ public class HealthRoutesController {
 	}
 
 	@PostMapping(value = "/userSubmit")
-	public ResponseEntity<UserDto> cadastraUsuario(UserDto dto) {
+	public ResponseEntity<UserDto> cadastraUsuario(@RequestBody UserDto dto) {
 		try {
 			User user = UserDto.convertUser(dto);
 			service.saveUser(user);
-			return new ResponseEntity<>(dto, HttpStatus.CREATED);
+			return new ResponseEntity<>(null, HttpStatus.CREATED);
 		} catch (SQLException ex) {
 			LOGGER.warn("Erro na Criação de Usuário!");
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
