@@ -38,7 +38,7 @@ public class HealthRoutesController {
 
 	@Autowired
 	private AGService agService;
-	
+
 	@Autowired
 	private GeoCodingService geoService;
 
@@ -94,9 +94,8 @@ public class HealthRoutesController {
 	}
 
 	@GetMapping(value = "/generateFirstGeneration")
-	public ResponseEntity<?> generateFirstGeneration(@RequestParam int vCapacity, @RequestParam int timeWindow,
-			@RequestParam int sizePop) {
-		List<Individual> individuals = agService.generateFirstGenerationRandom(vCapacity, timeWindow, sizePop, 50);
+	public ResponseEntity<List<Individual>> generateFirstGeneration(@RequestParam int vCapacity, @RequestParam int timeWindow) {
+		List<Individual> individuals = agService.generateFirstGenerationRandom(vCapacity, timeWindow, 100, 50);
 		for (int i = 0; i < individuals.size(); i++) {
 			System.out.println("Score: " + individuals.get(i).getScore());
 			System.out.print("População:");
@@ -105,7 +104,7 @@ public class HealthRoutesController {
 			}
 			System.out.println();
 		}
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(individuals, HttpStatus.ACCEPTED);
 	}
 
 }
