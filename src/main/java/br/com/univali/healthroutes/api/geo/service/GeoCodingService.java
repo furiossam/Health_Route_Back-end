@@ -19,7 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class GeoCodingService {
 
 	//API de busca de latitude e longitude
-	public static final String keyVirtualEarth = "Aj_qeSo2hPBeTqpYm7FxO-_DQ2uRksR9SMbmaobfq8VR5_mhsMphQ73p_7vdPoNV";
+	public static final String keyVirtualEarth = "Aqz7fy3UKeAIGyrBfNvsR70QRP7UjH_RQxH_kac2DVMADC1TuKvc1LHKjnh0OY6M";
 	
 	
 	

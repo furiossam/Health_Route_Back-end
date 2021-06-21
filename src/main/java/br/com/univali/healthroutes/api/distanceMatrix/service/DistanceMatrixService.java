@@ -8,25 +8,20 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 import br.com.univali.healthroutes.api.adress.model.Adress;
-import br.com.univali.healthroutes.api.distanceMatrix.model.Result;
 import br.com.univali.healthroutes.api.distanceMatrix.model.Root;
 
 @Service
 public class DistanceMatrixService {
 	
-	public static final String keyVirtualEarth = "Aj_qeSo2hPBeTqpYm7FxO-_DQ2uRksR9SMbmaobfq8VR5_mhsMphQ73p_7vdPoNV";
+	public static final String keyVirtualEarth = "Aq4V7NLmwYcGudi-TI2XV_GGuHI11adm29Dv7ks96J56cZte9HXrZOaY5oPIQukx";
 	
 	public Root getMatrix(List<Adress> adresses) {
 		

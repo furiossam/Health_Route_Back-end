@@ -8,12 +8,32 @@ public class Individual {
 	private List<Patient> genotype;
 	private double score;
 	private List<Integer> indexes;
+	private double timeWindow;
+	private double distance;
 
-	public Individual(List<Patient> genotype, double score, List<Integer> indexes) {
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
+	}
+
+	public double getTimeWindow() {
+		return timeWindow;
+	}
+
+	public void setTimeWindow(double timeWindow) {
+		this.timeWindow = timeWindow;
+	}
+
+	public Individual(List<Patient> genotype, double score, List<Integer> indexes, double timeWindow, double distance) {
 		super();
 		this.indexes = indexes;
 		this.genotype = genotype;
 		this.score = score;
+		this.timeWindow = timeWindow;
+		this.distance = distance;
 	}
 
 	public List<Integer> getIndexes() {

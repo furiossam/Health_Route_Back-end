@@ -32,9 +32,9 @@ public class AuthenticationService implements UserDetailsService {
 		extraData.put(TokenAuthenticationService.USER_ID, user.getId_user());
 		
 		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-		HealthRoutesUserDetails priceComparisonUserDetails = new HealthRoutesUserDetails(user.getCpf(), user.getLogin().getPassword(), authorities,
+		HealthRoutesUserDetails healthRoutesUserDetails = new HealthRoutesUserDetails(user.getCpf(), user.getLogin().getPassword(), authorities,
 				extraData);
-		return priceComparisonUserDetails;
+		return healthRoutesUserDetails;
 	}
 
 }

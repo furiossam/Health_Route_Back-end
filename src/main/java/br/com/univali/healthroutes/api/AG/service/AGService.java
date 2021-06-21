@@ -18,7 +18,9 @@ public interface AGService {
 	
 	public void setMatrices(List<Patient> patients);
 	
-	public double calculateScore(double timeWindowIndividualCounter, double vCapacityIndividualCounter, int size, double multiplicator, List<Patient> patients);
+	public double calculateScore(double timeWindowIndividualCounter, double vCapacityIndividualCounter, int size, double multiplicator, List<Patient> patients, double distanceIndividual);
 	
 	public double calculateCriticalityMultiplicator(List<Patient> patients);
+
+	public void deliverMedicines(List<Long> patientIds);
 }

@@ -114,13 +114,11 @@ public class TokenAuthenticationService {
 	private static String jwtAuth(Authentication auth, Date exp, String[] roles) {
 		int id = getRandomNumberInRange(1000, 10000000);
 		String username = auth.getName();
-		User user = userRepository.findByCpf(username);
 		Map<String, Object> detais = ((HealthRoutesUserDetails) auth).getExtraData();
 		return JWT.create().withIssuer(ISSUER).withSubject(username)
 				.withArrayClaim(CLAIM_ROLES, roles)
 				.withClaim(TOKEN_ID, id)		
 				.withClaim(USER_ID, (Long) detais.get(USER_ID))
-				.withClaim(USERNAME, user.getCpf())
 				.withExpiresAt(exp).sign(TOKEN_SIGN_ALGORITHM);	
 	}
 	

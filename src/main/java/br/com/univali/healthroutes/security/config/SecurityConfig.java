@@ -32,10 +32,10 @@ public class SecurityConfig extends WebSecurityConfig {
 		http.csrf().disable();
 
 		http.cors().and().authorizeRequests()
+		
 				// Authentication
-				//Tudo liberado mudar depois
-				.antMatchers(HttpMethod.POST, "/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/**").permitAll()
+		
+				.antMatchers(HttpMethod.POST, "/userSubmit").permitAll()
 				
 				.anyRequest().authenticated().and().httpBasic().disable()
 
